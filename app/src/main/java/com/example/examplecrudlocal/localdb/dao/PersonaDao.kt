@@ -1,6 +1,5 @@
 package com.example.examplecrudlocal.localdb.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -13,7 +12,7 @@ import com.example.examplecrudlocal.tools.TABLE_PEOPLE
 interface PersonaDao {
 
     @Query("SELECT * FROM $TABLE_PEOPLE")
-    fun getAll(): LiveData<List<Persona>>
+    suspend fun getAll(): List<Persona>
 
     @Insert
     suspend fun insert(persona: Persona)

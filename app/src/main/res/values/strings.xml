@@ -2,13 +2,8 @@
     <string name="app_name">Example CRUD Local</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="first_fragment_label">Lista Personas</string>
+    <string name="second_fragment_label">%1$s Persona</string>
 
     <string name="desc_float_add">Agrega o edita una persona</string>
     <string name="item_people_lab_1">Nombre:</string>
@@ -16,4 +11,19 @@
     <string name="item_people_lab_3">Dirección:</string>
     <string name="btn_positive">Aceptar</string>
     <string name="btn_negative">Cancelar</string>
+    <string name="btn_close">Cerrar</string>
+    <string name="btn_save">Guardar</string>
+    <string name="btn_update">Actualizar</string>
+    <string name="title_will_erase">¿Borar el registro?</string>
+    <string name="message_will_erase">Esta acción no es reversible</string>
+
+    <!-- fields people form -->
+    <string name="people_form_field_1">Nombre:</string>
+    <string name="people_form_field_2">Edad:</string>
+    <string name="people_form_field_3">Calle:</string>
+    <string name="people_form_field_4">No. Int:</string>
+    <string name="people_form_field_5">No. Est:</string>
+    <string name="people_form_field_6">Colonia:</string>
+    <string name="people_form_field_7">Entidad:</string>
+    <string name="people_form_field_8">Municipio/Alcadia:</string>
 </resources>

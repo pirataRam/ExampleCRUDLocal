@@ -45,4 +45,42 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
+
+    <style name="GlobalFieldsLayoutInputTextGeneric" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/title_text_color</item>
+        <item name="boxCornerRadiusTopStart">@dimen/login_box_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/login_box_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/login_box_radius</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/login_box_radius</item>
+        <item name="boxStrokeWidth">@dimen/login_box_stroke</item>
+        <item name="android:layout_marginStart">@dimen/login_button_margin</item>
+        <item name="android:layout_marginEnd">@dimen/login_button_margin</item>
+        <item name="android:layout_marginTop">@dimen/login_button_marginTop</item>
+        <item name="android:textColorHint">@color/title_text_color</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="GlobalFieldsInputTextGeneric">
+        <item name="android:background">@null</item>
+        <item name="android:textColor">@color/title_text_color</item>
+        <item name="android:textSize">@dimen/text_size_label</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textColorHint">@color/label_text_color</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:fontFamily">@font/nunito_regular</item>
+        <item name="android:textCursorDrawable">@drawable/cursor_drawable</item>
+        <item name="android:minHeight">@dimen/field_min_height</item>
+        <item name="android:paddingStart">@dimen/field_padding</item>
+    </style>
+
+    <style name="GlobalFieldsInputTextPassword" parent="GlobalFieldsInputTextGeneric">
+        <item name="android:inputType">textPassword</item>
+    </style>
+
+    <style name="GlobalFieldsInputTextNumbers" parent="GlobalFieldsInputTextGeneric">
+        <item name="android:inputType">number</item>
+        <item name="android:digits">@string/TF_Numbers</item>
+    </style>
 </resources>

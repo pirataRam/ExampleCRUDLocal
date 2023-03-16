@@ -1,15 +1,42 @@
 package com.example.examplecrudlocal.tools
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Build
 import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.examplecrudlocal.R
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
+import java.util.*
 
-fun AppCompatImageView.loadImage(stringCoded: String){
-    GlobalScope.launch(Dispatchers.Main){
-        Glide.with(this@loadImage)
-    }
+suspend fun ByteArray.byteToBitmap(): Bitmap = withContext(Dispatchers.IO) {
+    BitmapFactory.decodeByteArray(this@byteToBitmap, 0, this@byteToBitmap.size)
 }
 
-fun String.encodeBase64()
+suspend fun AppCompatImageView.loadImage(imageEncoded: String) = withContext(Dispatchers.Main) {
+    val bitmap = async(Dispatchers.IO) { imageEncoded.decodeBase64().byteToBitmap() }
+    Glide.with(this@loadImage)
+        .load(bitmap)
+        .centerCrop()
+        .placeholder(R.drawable.ic_sand_clock)
+        .error(R.drawable.ic_no_photo)
+        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+        .into(this@loadImage)
+}
+
+fun String.decodeBase64(): ByteArray {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        Base64.getDecoder().decode(this)
+    else
+        android.util.Base64.decode(this, android.util.Base64.DEFAULT)
+}
+
+fun ByteArray.encodeBase64(): String {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        Base64.getEncoder().encodeToString(this)
+    else
+        android.util.Base64.encodeToString(this, android.util.Base64.DEFAULT)
+}

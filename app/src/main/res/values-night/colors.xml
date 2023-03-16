@@ -10,5 +10,5 @@
 
     <color name="background_card">#530568</color>
     <color name="title_text_color">#E600FF</color>
-    <color name="label_text_color">#B0B0B0</color>
+    <color name="label_text_color">#00E2FF</color>
 </resources>

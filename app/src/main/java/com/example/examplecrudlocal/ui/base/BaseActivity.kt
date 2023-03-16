@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.examplecrudlocal.R
 import com.example.examplecrudlocal.databinding.DialogInfoBinding
 import com.example.examplecrudlocal.tools.ARGS_EXTRAS
@@ -29,6 +30,23 @@ abstract class BaseActivity : AppCompatActivity() {
             if (dialogLoading.isShowing)
                 dialogLoading.dismiss()
         }
+    }
+
+    fun showErrorMessage(message: String){
+        val dialog = AlertDialog.Builder(this@BaseActivity)
+        val binding: DialogInfoBinding = DialogInfoBinding.inflate(LayoutInflater.from(this@BaseActivity), null, false)
+        with(dialog){
+            setView(binding.root)
+            setCancelable(false)
+            setPositiveButton(R.string.btn_close) { dialog2, _ ->
+                dialog2.dismiss()
+            }
+        }
+        with(binding){
+            infoActvTitle.text = null
+            infoActvMsg.text = message
+        }
+        dialog.create().show()
     }
 
     fun showQuestionMessage(title: String, message: String, onAccept: (accept: Boolean) -> Unit){

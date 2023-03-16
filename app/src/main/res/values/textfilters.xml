@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Text FIlters -->
+    <string name="TF_LettersEnglish">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvxyz</string>
+    <string name="TF_LetterLatin">ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnoñpqrstuvxyzÁÉÍÓÚáéíóúÄËÏÖÜäëïöüÂÊÎÔÛâêîôûÀÈÌÒÙàèìòùÇç</string>
+    <string name="TF_LettersEnglishWithSpace">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvxyz</string>
+    <string name="TF_LetterLatinWithSpace">ABCDEFGHIJKLMNÑOPQRSTUVWXYZ abcdefghijklmnoñpqrstuvxyzÁÉÍÓÚáéíóúÄËÏÖÜäëïöüÂÊÎÔÛâêîôûÀÈÌÒÙàèìòùÇç</string>
+    <string name="TF_LettersEnglishWithSpaceAndDot">ABCDEFGHIJKLMNOPQRSTUVWXYZ .abcdefghijklmnopqrstuvxyz</string>
+    <string name="TF_LetterLatinWithSpaceAndDot">ABCDEFGHIJKLMNÑOPQRSTUVWXYZ .abcdefghijklmnoñpqrstuvxyzÁÉÍÓÚáéíóúÄËÏÖÜäëïöüÂÊÎÔÛâêîôûÀÈÌÒÙàèìòùÇç</string>
+    <string name="TF_Email">abcdefghijklmnopqrstuvwxyz-_@.1234567890</string>
+    <string name="TF_Numbers">1234567890</string>
+    <string name="TF_Digits">-1234567890.</string>
+    <string name="TF_Phone">+ 1234567890</string>
+    <string name="TF_CURP_RFC">ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890</string>
+    <string name="TF_LettersCapsEnglishWithNumbers">ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890</string>
+    <string name="TF_LettersEnglishWithNumbers">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvxyz1234567890</string>
+    <string name="TF_LetterLatinWithNumbers">ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnoñpqrstuvxyzÁÉÍÓÚáéíóúÄËÏÖÜäëïöüÂÊÎÔÛâêîôûÀÈÌÒÙàèìòùÇç1234567890</string>
+    <string name="TF_LettersEnglishWithSpaceWithNumbers">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvxyz1234567890</string>
+    <string name="TF_LetterLatinWithSpaceWithNumbers">ABCDEFGHIJKLMNÑOPQRSTUVWXYZ abcdefghijklmnoñpqrstuvxyzÁÉÍÓÚáéíóúÄËÏÖÜäëïöüÂÊÎÔÛâêîôûÀÈÌÒÙàèìòùÇç1234567890</string>
+    <string name="TF_LettersEnglishWithSpaceAndDotWithNumbers">ABCDEFGHIJKLMNOPQRSTUVWXYZ .abcdefghijklmnopqrstuvxyz1234567890</string>
+    <string name="TF_LetterLatinWithSpaceAndDotWithNumbers">ABCDEFGHIJKLMNÑOPQRSTUVWXYZ .abcdefghijklmnoñpqrstuvxyzÁÉÍÓÚáéíóúÄËÏÖÜäëïöüÂÊÎÔÛâêîôûÀÈÌÒÙàèìòùÇç1234567890</string>
+</resources>
