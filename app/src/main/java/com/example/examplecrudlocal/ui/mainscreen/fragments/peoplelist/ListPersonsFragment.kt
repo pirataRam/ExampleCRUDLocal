@@ -1,10 +1,10 @@
 package com.example.examplecrudlocal.ui.mainscreen.fragments.peoplelist
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.examplecrudlocal.R
 import com.example.examplecrudlocal.databinding.FragmentFirstBinding
@@ -12,6 +12,7 @@ import com.example.examplecrudlocal.rest.state.StatusType
 import com.example.examplecrudlocal.tools.ARGS_EXTRAS
 import com.example.examplecrudlocal.ui.base.BaseFragment
 import com.example.examplecrudlocal.ui.mainscreen.MainActivity
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -46,42 +47,58 @@ class ListPersonsFragment : BaseFragment() {
     }
 
     override fun setListeners() {
-
     }
 
     override fun setObservers() {
-        vm.listPeople.observe(viewLifecycleOwner){
-            val resource = it ?: return@observe
-            mainActivity.showLoading(false)
-            when(resource.statusType){
-                StatusType.SUCCESS -> {
-                    listAdapter = PeopleListAdapter(it.data ?: emptyList()){ person, isErase ->
-                        if (isErase) {
-                            mainActivity.showQuestionMessage(
-                                getString(R.string.title_will_erase),
-                                getString(R.string.message_will_erase)
-                            ) { confirm ->
-                                if (confirm)
-                                    vm.deletePeople(requireContext(), person)
+        with(vm) {
+            listPeople.observe(viewLifecycleOwner) {
+                val resource = it ?: return@observe
+                mainActivity.showLoading(false)
+                when (resource.statusType) {
+                    StatusType.SUCCESS -> {
+                        listAdapter = PeopleListAdapter(it.data ?: emptyList()) { person, isErase ->
+                            if (isErase) {
+                                mainActivity.showQuestionMessage(
+                                    getString(R.string.title_will_erase),
+                                    getString(R.string.message_will_erase)
+                                ) { confirm ->
+                                    if (confirm)
+                                        vm.deletePeople(requireContext(), person)
+                                }
+                            } else {
+                                val b = Bundle()
+                                b.putString(ARGS_EXTRAS, Gson().toJson(person))
+                                goToFragment(R.id.SecondFragment, bundle = b)
                             }
-                        } else {
-                            val b = Bundle()
-                            b.putParcelable(ARGS_EXTRAS, person)
-                            goToFragment(R.id.SecondFragment, bundle = b)
-                        }
 
+                        }
                     }
+                    StatusType.ERROR -> mainActivity.showErrorMessage(resource.message)
+                    StatusType.LOADING -> mainActivity.showLoading(true)
                 }
-                StatusType.ERROR -> mainActivity.showErrorMessage(resource.message)
-                StatusType.LOADING -> mainActivity.showLoading(true)
+            }
+            deleted.observe(viewLifecycleOwner){
+                val resource = it ?: return@observe
+                mainActivity.showLoading(false)
+                when(resource.statusType){
+                    StatusType.SUCCESS -> {
+                        mainActivity.showToastMessage(getString(R.string.toast_inserted))
+                        vm.loadListFromLocal(requireContext())
+                    }
+                    StatusType.ERROR -> mainActivity.showErrorMessage(resource.message)
+                    StatusType.LOADING -> mainActivity.showLoading(true)
+                }
             }
         }
-    }
+}
 
     override fun cleanFields() {}
 
     override fun removeObservers() {
-        vm.listPeople.removeObservers(viewLifecycleOwner)
+        with(vm) {
+            listPeople.removeObservers(viewLifecycleOwner)
+            deleted.removeObservers(viewLifecycleOwner)
+        }
         _binding = null
     }
 
@@ -91,7 +108,7 @@ class ListPersonsFragment : BaseFragment() {
     }
 
     override fun changeToolbarParams() {
-
+        mainActivity.changeToolbarParams(getString(R.string.first_fragment_label))
     }
 
 }

@@ -75,6 +75,21 @@
         <item name="android:paddingStart">@dimen/field_padding</item>
     </style>
 
+    <style name="GlobalFieldsInputTextGeneric.MaterialTexView">
+        <item name="android:background">@null</item>
+        <item name="android:textColor">@color/title_text_color</item>
+        <item name="android:textSize">@dimen/text_size_label</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textColorHint">@color/label_text_color</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:fontFamily">@font/nunito_regular</item>
+        <item name="android:minHeight">@dimen/field_min_height</item>
+        <item name="android:paddingStart">@dimen/field_padding</item>
+        <item name="android:drawableEnd">@drawable/ic_arrow_drop_down</item>
+        <item name="android:drawableTint">@color/title_text_color</item>
+    </style>
+
     <style name="GlobalFieldsInputTextPassword" parent="GlobalFieldsInputTextGeneric">
         <item name="android:inputType">textPassword</item>
     </style>

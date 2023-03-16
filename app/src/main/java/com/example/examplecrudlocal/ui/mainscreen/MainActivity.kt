@@ -1,19 +1,19 @@
 package com.example.examplecrudlocal.ui.mainscreen
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.examplecrudlocal.R
 import com.example.examplecrudlocal.databinding.ActivityMainBinding
+import com.example.examplecrudlocal.tools.gone
 import com.example.examplecrudlocal.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,6 +25,7 @@ class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
     private lateinit var navController : NavController
+    private var viewMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +45,11 @@ class MainActivity : BaseActivity() {
     }
 
     override fun setListeners() {
-        binding.fab.setOnClickListener { _ ->
-            navController.navigate(R.id.SecondFragment)
+        with(binding) {
+            fab.setOnClickListener { _ ->
+                navController.navigate(R.id.SecondFragment)
+                fab.gone()
+            }
         }
     }
 
@@ -73,5 +77,40 @@ class MainActivity : BaseActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    override fun changeToolbarParams(title: String) {
+        with(binding.toolbar){
+            this.title = title
+            setTitleTextColor(ContextCompat.getColor(this@MainActivity, R.color.title_text_color))
+        }
+    }
+
+    fun changeFabIcon(willEdit: Boolean){
+        with(binding) {
+            if (willEdit) {
+                fab.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this@MainActivity,
+                        R.drawable.ic_person_add
+                    )
+                )
+            }
+        }
+    }
+
+    fun setViewMode(saving: Boolean, editPressed: (boolean: Boolean) -> Unit){
+        with(binding){
+            fab.setOnClickListener {
+                setVisible(saving)
+                fab.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this@MainActivity,
+                        R.drawable.ic_person_add
+                    )
+                )
+                editPressed(true)
+            }
+        }
     }
 }

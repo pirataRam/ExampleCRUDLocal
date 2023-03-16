@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.examplecrudlocal.R
 import com.example.examplecrudlocal.localdb.entities.Persona
 import com.example.examplecrudlocal.rest.repositories.RoomRepository
 import com.example.examplecrudlocal.rest.state.Resource
@@ -34,8 +35,12 @@ class ListPersonsViewModel @Inject constructor(
     fun deletePeople(context: Context, persona: Persona) {
         viewModelScope.launch(Dispatchers.IO){
             _deleted.postValue(Resource.loading())
-            roomRepository.deletePerson(context = context, persona = persona)
-            _deleted.postValue(Resource.success(true))
+            try {
+                roomRepository.deletePerson(context = context, persona = persona)
+                _deleted.postValue(Resource.success(true))
+            } catch (e: Exception){
+                _deleted.postValue(Resource.error(context.getString(R.string.error_saving_field)))
+            }
         }
     }
 

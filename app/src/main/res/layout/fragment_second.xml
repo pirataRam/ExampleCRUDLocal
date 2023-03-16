@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.mainscreen.fragments.editpeople.SecondFragment">
+    tools:context=".ui.mainscreen.fragments.editpeople.AddPeopleFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -44,7 +44,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/people_form_field_1"
-                android:textCursorDrawable="@null" />
+                android:textCursorDrawable="@null"
+                android:imeOptions="actionNext"
+                android:nextFocusRight="@id/tiet_age"
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -63,7 +66,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/people_form_field_2"
-                android:textCursorDrawable="@null" />
+                android:textCursorDrawable="@null"
+                android:imeOptions="actionNext"
+                android:nextFocusRight="@id/tiet_address"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -82,7 +87,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/people_form_field_3"
-                android:textCursorDrawable="@null" />
+                android:textCursorDrawable="@null"
+                android:imeOptions="actionNext"
+                android:nextFocusRight="@id/tiet_number_int"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -101,7 +108,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/people_form_field_4"
-                android:textCursorDrawable="@null" />
+                android:textCursorDrawable="@null"
+                android:imeOptions="actionNext"
+                android:nextFocusRight="@id/tiet_number_ext"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -112,7 +121,9 @@
             android:layout_marginTop="@dimen/field_margin_top"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/gl_main"
-            app:layout_constraintTop_toBottomOf="@id/til_address">
+            app:layout_constraintTop_toBottomOf="@id/til_address"
+            android:imeOptions="actionNext"
+            android:nextFocusRight="@id/tiet_suburb">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiet_number_ext"
@@ -139,7 +150,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/people_form_field_6"
-                android:textCursorDrawable="@null" />
+                android:textCursorDrawable="@null"
+                android:imeOptions="actionNext"
+                android:nextFocusRight="@id/mactv_entity"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -153,14 +166,15 @@
             app:layout_constraintTop_toBottomOf="@id/til_suburb">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/tiet_entity"
-                style="@style/GlobalFieldsInputTextGeneric"
+                android:id="@+id/mactv_entity"
+                style="@style/GlobalFieldsInputTextGeneric.MaterialTexView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/people_form_field_7"
-                android:inputType="none"
-                android:textCursorDrawable="@null"
-                tools:ignore="RtlSymmetry" />
+                android:inputType="textAutoComplete"
+                android:imeOptions="actionNext"
+                android:nextFocusRight="@id/mactv_locale"
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -174,13 +188,15 @@
             app:layout_constraintTop_toBottomOf="@id/til_entity">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/tiet_locale"
-                style="@style/GlobalFieldsInputTextGeneric"
+                android:id="@+id/mactv_locale"
+                style="@style/GlobalFieldsInputTextGeneric.MaterialTexView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="@string/people_form_field_8"
-                android:inputType="none"
-                android:textCursorDrawable="@null" />
+                android:inputType="textAutoComplete"
+                android:imeOptions="actionDone"
+                android:nextFocusRight="@id/acb_save"
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -199,7 +215,6 @@
             app:layout_constraintEnd_toEndOf="@id/til_locale"
             app:layout_constraintStart_toStartOf="@id/til_locale"
             app:layout_constraintTop_toBottomOf="@id/til_locale" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -3,6 +3,7 @@ package com.example.examplecrudlocal.tools
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
+import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -39,4 +40,16 @@ fun ByteArray.encodeBase64(): String {
         Base64.getEncoder().encodeToString(this)
     else
         android.util.Base64.encodeToString(this, android.util.Base64.DEFAULT)
+}
+
+fun View.show(){
+    visibility = View.VISIBLE
+}
+
+fun View.hide(){
+    visibility = View.INVISIBLE
+}
+
+fun View.gone(){
+    visibility = View.GONE
 }

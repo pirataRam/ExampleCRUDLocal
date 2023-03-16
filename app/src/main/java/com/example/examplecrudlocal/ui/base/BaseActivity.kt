@@ -102,4 +102,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
     abstract fun setObservers()
 
+    abstract fun changeToolbarParams(title: String)
+
 }
