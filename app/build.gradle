@@ -1,0 +1,111 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    namespace 'com.example.examplecrudlocal'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.example.examplecrudlocal"
+        minSdk 24
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/LICENSE.txt', 'META-INF/license.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt', 'META-INF/notice.txt', 'META-INF/ASL2.0', 'META-INF/*.kotlin_module']
+        }
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+
+    kapt {
+        correctErrorTypes true
+    }
+}
+
+dependencies {
+
+    def activityKtx_version             = '1.6.1'
+    def appCompat_version               = '1.6.1'
+    def constraint_version              = '2.1.4'
+    def coreKotlin_version              = '1.9.0'
+    def espresso_version                = '3.5.1'
+    def glide_version                   = '4.14.2'
+    def hilt_version                    = '2.45'
+    def hiltCompiler_version            = '2.45'
+    def junit_version                   = '1.1.5'
+    def junitTest_version               = "4.13.2"
+    def lifeCycle_version               = '2.6.0'
+    def lottieVersion                   = '6.0.0'
+    def material_version                = '1.8.0'
+    def multiDex_version                = "2.0.1"
+    def navFragment_version             = '2.5.3'
+    def navUI_version                   = '2.5.3'
+    def room_version                    = "2.5.0"
+    def work_version                    = '2.8.0'
+
+    //core
+    implementation "androidx.multidex:multidex:$multiDex_version"
+    implementation "androidx.core:core-ktx:$coreKotlin_version"
+    implementation project(path: ':imageChooser')
+
+    //Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hiltCompiler_version"
+
+    //GUI
+    implementation "androidx.appcompat:appcompat:$appCompat_version"
+    implementation "com.google.android.material:material:$material_version"
+    implementation "androidx.activity:activity-ktx:$activityKtx_version"
+    implementation "androidx.constraintlayout:constraintlayout:$constraint_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:$navFragment_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$navUI_version"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
+    //ImageProcessor
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
+
+    //Room
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    //LifeCycle
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifeCycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifeCycle_version"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+
+    //Test
+    testImplementation "junit:junit:$junit_version"
+    androidTestImplementation "androidx.test.ext:junit:$junitTest_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+}

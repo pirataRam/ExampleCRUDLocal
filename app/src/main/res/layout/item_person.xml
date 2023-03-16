@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/fab_margin"
+    app:cardBackgroundColor="@color/background_card"
+    app:cardCornerRadius="@dimen/cornerRadius"
+    app:cardElevation="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/aciv_photo"
+            android:layout_width="@dimen/photo_size"
+            android:layout_height="@dimen/photo_size"
+            android:layout_margin="@dimen/fab_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/aciv_delete"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@drawable/ic_delete"
+            android:tint="@color/title_text_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/aciv_photo"
+            app:layout_constraintStart_toStartOf="@id/aciv_photo"
+            app:layout_constraintTop_toBottomOf="@id/aciv_photo" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/actv_title_name"
+            style="@style/Label.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:text="@string/item_people_lab_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/aciv_photo"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/actv_label_name"
+            style="@style/Label.Subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/aciv_photo"
+            app:layout_constraintTop_toBottomOf="@id/actv_title_name"
+            tools:text="Israel Ramirez" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/actv_title_age"
+            style="@style/Label.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:text="@string/item_people_lab_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/aciv_photo"
+            app:layout_constraintTop_toBottomOf="@id/actv_label_name" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/actv_label_age"
+            style="@style/Label.Subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/aciv_photo"
+            app:layout_constraintTop_toBottomOf="@id/actv_title_age"
+            tools:text="30" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/actv_title_address"
+            style="@style/Label.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:text="@string/item_people_lab_3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/aciv_photo"
+            app:layout_constraintTop_toBottomOf="@id/actv_label_age" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/actv_label_address"
+            style="@style/Label.Subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/aciv_photo"
+            app:layout_constraintTop_toBottomOf="@id/actv_title_address"
+            tools:text="Arquitectos 34, Escandón II Sección" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
