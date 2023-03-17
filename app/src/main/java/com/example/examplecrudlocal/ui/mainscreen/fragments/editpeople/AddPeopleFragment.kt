@@ -113,6 +113,8 @@ class AddPeopleFragment : BaseFragment() {
                 }
                 acbSave.gone()
             }
+        } else { //hide float edit
+            binding.fabEdit.gone()
         }
     }
 
