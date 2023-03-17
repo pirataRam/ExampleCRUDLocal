@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.examplecrudlocal.R
@@ -23,6 +24,9 @@ import com.example.examplecrudlocal.tools.Constants
 import com.example.examplecrudlocal.tools.DIR_SAVE
 import com.example.examplecrudlocal.tools.MAX_SIZE
 import com.example.examplecrudlocal.tools.encodeBase64
+import com.example.examplecrudlocal.tools.gone
+import com.example.examplecrudlocal.tools.loadImage
+import com.example.examplecrudlocal.tools.show
 import com.example.examplecrudlocal.ui.base.BaseFragment
 import com.example.examplecrudlocal.ui.mainscreen.MainActivity
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -30,6 +34,9 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
 import com.irisoftmex.imagechooser.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 
 /**
@@ -89,17 +96,43 @@ class AddPeopleFragment : BaseFragment() {
         } catch (e: Exception){
             null
         }
+        //validating if person is not null to show read only
+        if (persona != null){
+            enableFields(false)
+            with(binding){
+                tietName.setText(persona?.nombre)
+                tietAge.setText(persona?.edad.toString())
+                tietAddress.setText(persona?.domicilioCalle)
+                tietNumberInt.setText(persona?.domicilioNumInt)
+                tietNumberExt.setText(persona?.domicilioNumExt)
+                tietSuburb.setText(persona?.domicilioColonia)
+                mactvEntity.setText(persona?.domicilioEntidad)
+                mactvLocale.setText(persona?.domicilioMunicipio)
+                lifecycleScope.launch(Dispatchers.Main){
+                    acivPhotoFull.loadImage(persona!!.fotografia)
+                }
+                acbSave.gone()
+            }
+        }
     }
 
     override fun setListeners() {
         with(binding){
+            fabEdit.setOnClickListener {
+                fabEdit.gone()
+                acbSave.show()
+                activityMain.changeToolbarParams(String.format(getString(R.string.second_fragment_label), getString(R.string.fragment_label_update)))
+                acbSave.text = getString(R.string.btn_update)
+                enableFields(true)
+                tietName.requestFocus()
+            }
             acbSave.setOnClickListener {
-                if (imagePath == null)
+                if (imagePath == null && persona == null)
                     activityMain.showToastMessage(getString(R.string.error_no_photo_selected))
                 else
                     vm.validateEntities(binding.mactvEntity, binding.mactvLocale, listLocales)
             }
-            mactvEntity.setOnItemClickListener { parent, view, position, id ->
+            mactvEntity.setOnItemClickListener { _, _, position, _ ->
                 listLocales = Constants.getMunicipiosByEstado(listEntities.getItem(position)!!)
                 val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, listLocales)
                 mactvLocale.setAdapter(adapter)
@@ -180,11 +213,11 @@ class AddPeopleFragment : BaseFragment() {
             }
             mactvEntity.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus)
-                    nsvMain.smoothScrollTo(nsvMain.maxScrollAmount, nsvMain.scrollY, 2000)
+                    nsvMain.smoothScrollTo(nsvMain.scrollX + 100, nsvMain.scrollY, 2000)
             }
             mactvLocale.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus)
-                    nsvMain.smoothScrollTo(nsvMain.maxScrollAmount, nsvMain.scrollY, 2000)
+                    nsvMain.smoothScrollTo(nsvMain.scrollX + 100, nsvMain.scrollY, 2000)
             }
         }
     }
@@ -228,7 +261,6 @@ class AddPeopleFragment : BaseFragment() {
                 when(resource.statusType){
                     StatusType.SUCCESS -> {
                         activityMain.showToastMessage(getString(R.string.toast_inserted))
-//                        activityMain.changeFabIcon(false)
                         cleanFields()
                     }
                     StatusType.ERROR -> activityMain.showErrorMessage(resource.message)
@@ -241,7 +273,6 @@ class AddPeopleFragment : BaseFragment() {
                 when(resource.statusType){
                     StatusType.SUCCESS -> {
                         activityMain.showToastMessage(getString(R.string.toast_updated))
-//                        activityMain.changeFabIcon(false)
                         cleanFields()
                     }
                     StatusType.ERROR -> activityMain.showErrorMessage(resource.message)
@@ -280,6 +311,7 @@ class AddPeopleFragment : BaseFragment() {
             listErrors.removeObservers(viewLifecycleOwner)
             saving.removeObservers(viewLifecycleOwner)
             update.removeObservers(viewLifecycleOwner)
+            listItem.removeObservers(viewLifecycleOwner)
         }
         _binding = null
     }
@@ -289,17 +321,8 @@ class AddPeopleFragment : BaseFragment() {
         with(binding) {
             list = listOf(tietName, tietAge, tietAddress, tietNumberInt, tietNumberExt, tietSuburb)
             list2 = listOf(mactvEntity, mactvLocale)
-
-//            activityMain.setViewMode(persona != null){
-//                enableFields(it)
-//            }
-//
-//            if (persona != null) {
-//                activityMain.changeFabIcon(true)
-//            } else {
-                enableFields(true)
-                mactvEntity.setAdapter(listEntities)
-//            }
+            enableFields(true)
+            mactvEntity.setAdapter(listEntities)
         }
     }
 
@@ -308,22 +331,19 @@ class AddPeopleFragment : BaseFragment() {
         binding.acbSave.text = if (persona == null) getString(R.string.btn_save) else getString(R.string.btn_update)
     }
 
-    private fun enableFields(enable :Boolean) {
+    private fun enableFields(b :Boolean) {
         with(binding){
             for (i in list){
                 with(i) {
-                    isFocusable = enable
-                    isClickable = enable
-                    isCursorVisible = enable
+                    isEnabled = b
                 }
             }
             for (j in list2){
                 with(j){
-                    isClickable = enable
-                    isFocusable = enable
-                    isCursorVisible = false
+                    isEnabled = b
                 }
             }
+            acivPhotoFull.isClickable = b
             acbSave.text = getString(if (persona == null) R.string.btn_save else R.string.btn_update)
         }
     }

@@ -3,6 +3,7 @@ package com.example.examplecrudlocal.tools
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
+import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.Glide
@@ -18,7 +19,8 @@ suspend fun ByteArray.byteToBitmap(): Bitmap = withContext(Dispatchers.IO) {
 }
 
 suspend fun AppCompatImageView.loadImage(imageEncoded: String) = withContext(Dispatchers.Main) {
-    val bitmap = async(Dispatchers.IO) { imageEncoded.decodeBase64().byteToBitmap() }
+    val decoded = imageEncoded.decodeBase64()
+    val bitmap = BitmapFactory.decodeByteArray(decoded, 0, decoded.size)
     Glide.with(this@loadImage)
         .load(bitmap)
         .centerCrop()

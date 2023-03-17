@@ -89,7 +89,7 @@ class ListPersonsFragment : BaseFragment() {
                 mainActivity.showLoading(false)
                 when(resource.statusType){
                     StatusType.SUCCESS -> {
-                        mainActivity.showToastMessage(getString(R.string.toast_inserted))
+                        mainActivity.showToastMessage(getString(R.string.toast_deleted))
                         vm.loadListFromLocal(requireContext())
                     }
                     StatusType.ERROR -> mainActivity.showErrorMessage(resource.message)

@@ -76,35 +76,7 @@ class MainActivity : BaseActivity() {
     override fun changeToolbarParams(title: String) {
         with(binding.toolbar){
             this.title = title
-            setTitleTextColor(ContextCompat.getColor(this@MainActivity, R.color.title_text_color))
+            setTitleTextColor(ContextCompat.getColor(this@MainActivity, R.color.background_card))
         }
     }
-
-//    fun changeFabIcon(willEdit: Boolean){
-//        with(binding) {
-//            if (willEdit) {
-//                fab.setImageDrawable(
-//                    ContextCompat.getDrawable(
-//                        this@MainActivity,
-//                        R.drawable.ic_person_add
-//                    )
-//                )
-//            }
-//        }
-//    }
-//
-//    fun setViewMode(saving: Boolean, editPressed: (boolean: Boolean) -> Unit){
-//        with(binding){
-//            fab.setOnClickListener {
-//                setVisible(saving)
-//                fab.setImageDrawable(
-//                    ContextCompat.getDrawable(
-//                        this@MainActivity,
-//                        R.drawable.ic_person_add
-//                    )
-//                )
-//                editPressed(true)
-//            }
-//        }
-//    }
 }
