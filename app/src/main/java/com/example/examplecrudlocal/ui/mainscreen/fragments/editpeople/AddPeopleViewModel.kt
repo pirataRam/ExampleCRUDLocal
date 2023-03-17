@@ -9,6 +9,8 @@ import com.example.examplecrudlocal.R
 import com.example.examplecrudlocal.localdb.entities.Persona
 import com.example.examplecrudlocal.rest.repositories.RoomRepository
 import com.example.examplecrudlocal.rest.state.Resource
+import com.example.examplecrudlocal.tools.Constants
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +31,9 @@ class AddPeopleViewModel @Inject constructor(
     private val _listErrors = MutableLiveData<List<TextInputEditText>>()
     val listErrors: LiveData<List<TextInputEditText>> get() = _listErrors
 
+    private val _listItem = MutableLiveData<MaterialAutoCompleteTextView?>()
+    val listItem: LiveData<MaterialAutoCompleteTextView?> get() = _listItem
+
     fun validateFields(list: List<TextInputEditText>){
         val array = ArrayList<TextInputEditText>()
         for(i in list){
@@ -36,6 +41,32 @@ class AddPeopleViewModel @Inject constructor(
                 array.add(i)
         }
         _listErrors.postValue(array.toList())
+    }
+
+    fun validateEntities(entity: MaterialAutoCompleteTextView, locale: MaterialAutoCompleteTextView, locales: List<String>){
+        var t = ""
+        var textWorking = entity.text.toString().trim()
+        //validating entities
+        for (i in Constants.estados){
+            if (i == textWorking){
+                t = i
+                break
+            }
+        }
+        if (t.isEmpty())
+            _listItem.postValue(entity)
+        else {
+            t = ""
+            textWorking = locale.text.toString().trim()
+            //validating a locale
+            for(j in locales){
+                if (j == textWorking){
+                    t = j
+                    break
+                }
+            }
+        }
+        _listItem.postValue(if (t.isEmpty()) locale else null)
     }
 
     fun addPerson(context: Context, persona: Persona){

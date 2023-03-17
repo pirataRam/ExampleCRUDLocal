@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.examplecrudlocal.R
 import com.example.examplecrudlocal.databinding.FragmentFirstBinding
 import com.example.examplecrudlocal.rest.state.StatusType
@@ -47,6 +48,11 @@ class ListPersonsFragment : BaseFragment() {
     }
 
     override fun setListeners() {
+        with(binding){
+            fab.setOnClickListener {
+                goToFragment(R.id.SecondFragment)
+            }
+        }
     }
 
     override fun setObservers() {
@@ -72,6 +78,7 @@ class ListPersonsFragment : BaseFragment() {
                             }
 
                         }
+                        binding.rvListPersons.adapter = listAdapter
                     }
                     StatusType.ERROR -> mainActivity.showErrorMessage(resource.message)
                     StatusType.LOADING -> mainActivity.showLoading(true)
@@ -105,6 +112,8 @@ class ListPersonsFragment : BaseFragment() {
     override fun initViewComponents() {
         mainActivity = requireActivity() as MainActivity
         vm.loadListFromLocal(requireContext())
+        binding.rvListPersons.layoutManager = LinearLayoutManager(requireContext()).apply { orientation = LinearLayoutManager.VERTICAL }
+        binding.rvListPersons.adapter = PeopleListAdapter(emptyList()){ _, _ -> }
     }
 
     override fun changeToolbarParams() {

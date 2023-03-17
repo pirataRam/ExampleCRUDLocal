@@ -71,6 +71,28 @@ abstract class BaseActivity : AppCompatActivity() {
         dialog.create().show()
     }
 
+    fun showQuestionMessage(onAccept: (accept: Boolean) -> Unit){
+        val dialog = AlertDialog.Builder(this@BaseActivity)
+        val binding: DialogInfoBinding = DialogInfoBinding.inflate(LayoutInflater.from(this@BaseActivity), null, false)
+        with(dialog){
+            setView(binding.root)
+            setCancelable(false)
+            setPositiveButton(R.string.title_select_image_op_1) { dialog1, _ ->
+                dialog1.dismiss()
+                onAccept(true)
+            }
+            setNegativeButton(R.string.title_select_image_op_2) { dialog2, _ ->
+                dialog2.dismiss()
+                onAccept(false)
+            }
+        }
+        with(binding){
+            infoActvTitle.text = getString(R.string.title_select_image)
+            infoActvMsg.text = getString(R.string.subtitle_select_image_)
+        }
+        dialog.create().show()
+    }
+
     fun <T> launchActivity(
         clazz: Class<T>
     ) {

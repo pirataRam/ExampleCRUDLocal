@@ -45,12 +45,6 @@ class MainActivity : BaseActivity() {
     }
 
     override fun setListeners() {
-        with(binding) {
-            fab.setOnClickListener { _ ->
-                navController.navigate(R.id.SecondFragment)
-                fab.gone()
-            }
-        }
     }
 
     override fun setObservers() {
@@ -86,31 +80,31 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    fun changeFabIcon(willEdit: Boolean){
-        with(binding) {
-            if (willEdit) {
-                fab.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        this@MainActivity,
-                        R.drawable.ic_person_add
-                    )
-                )
-            }
-        }
-    }
-
-    fun setViewMode(saving: Boolean, editPressed: (boolean: Boolean) -> Unit){
-        with(binding){
-            fab.setOnClickListener {
-                setVisible(saving)
-                fab.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        this@MainActivity,
-                        R.drawable.ic_person_add
-                    )
-                )
-                editPressed(true)
-            }
-        }
-    }
+//    fun changeFabIcon(willEdit: Boolean){
+//        with(binding) {
+//            if (willEdit) {
+//                fab.setImageDrawable(
+//                    ContextCompat.getDrawable(
+//                        this@MainActivity,
+//                        R.drawable.ic_person_add
+//                    )
+//                )
+//            }
+//        }
+//    }
+//
+//    fun setViewMode(saving: Boolean, editPressed: (boolean: Boolean) -> Unit){
+//        with(binding){
+//            fab.setOnClickListener {
+//                setVisible(saving)
+//                fab.setImageDrawable(
+//                    ContextCompat.getDrawable(
+//                        this@MainActivity,
+//                        R.drawable.ic_person_add
+//                    )
+//                )
+//                editPressed(true)
+//            }
+//        }
+//    }
 }

@@ -1,25 +1,36 @@
 package com.example.examplecrudlocal.ui.mainscreen.fragments.editpeople
 
+import android.app.Activity
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.examplecrudlocal.R
 import com.example.examplecrudlocal.databinding.FragmentSecondBinding
 import com.example.examplecrudlocal.localdb.entities.Persona
 import com.example.examplecrudlocal.rest.state.StatusType
 import com.example.examplecrudlocal.tools.ARGS_EXTRAS
 import com.example.examplecrudlocal.tools.Constants
+import com.example.examplecrudlocal.tools.DIR_SAVE
+import com.example.examplecrudlocal.tools.MAX_SIZE
+import com.example.examplecrudlocal.tools.encodeBase64
 import com.example.examplecrudlocal.ui.base.BaseFragment
 import com.example.examplecrudlocal.ui.mainscreen.MainActivity
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
+import com.irisoftmex.imagechooser.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -41,6 +52,23 @@ class AddPeopleFragment : BaseFragment() {
         ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, Constants.estados)
     }
     private var listLocales = emptyList<String>()
+    private var imagePath: Uri? = null
+    private val imagePicker = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+        if (result.resultCode == Activity.RESULT_OK && result.data != null){
+            imagePath = result.data?.data
+            Log.d("Fragment", "Uri es -> ${imagePath.toString()}")
+            Log.d("Fragment", "Uri es -> ${imagePath?.path}")
+            Log.d("Fragment", "Uri es -> ${imagePath?.encodedPath}")
+            Glide.with(requireContext())
+                .load(imagePath)
+                .placeholder(R.drawable.ic_sand_clock)
+                .error(R.drawable.ic_no_photo)
+                .centerCrop()
+                .into(binding.acivPhotoFull)
+        } else {
+            activityMain.showToastMessage(getString(R.string.error_no_photo_selected))
+        }
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -66,12 +94,97 @@ class AddPeopleFragment : BaseFragment() {
     override fun setListeners() {
         with(binding){
             acbSave.setOnClickListener {
-                vm.validateFields(list)
+                if (imagePath == null)
+                    activityMain.showToastMessage(getString(R.string.error_no_photo_selected))
+                else
+                    vm.validateEntities(binding.mactvEntity, binding.mactvLocale, listLocales)
             }
             mactvEntity.setOnItemClickListener { parent, view, position, id ->
                 listLocales = Constants.getMunicipiosByEstado(listEntities.getItem(position)!!)
                 val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, listLocales)
                 mactvLocale.setAdapter(adapter)
+            }
+            acivPhotoFull.setOnClickListener {
+                activityMain.showQuestionMessage(){accept ->
+                    if (accept) { //Camera
+                        ImagePicker.Companion.with(requireActivity())
+                            .cameraOnly()
+                            .cropSquare()
+                            .compress(MAX_SIZE)
+                            //  Path: /storage/sdcard0/Android/data/package/files
+                            .saveDir(requireContext().getExternalFilesDir(null)!!)
+                            //  Path: /storage/sdcard0/Android/data/package/files/DCIM
+                            .saveDir(requireContext().getExternalFilesDir(Environment.DIRECTORY_DCIM)!!)
+                            //  Path: /storage/sdcard0/Android/data/package/files/Download
+                            .saveDir(requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!)
+                            //  Path: /storage/sdcard0/Android/data/package/files/Pictures
+                            .saveDir(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!)
+                            //  Path: /storage/sdcard0/Android/data/package/files/Pictures/ImagePicker
+                            .saveDir(
+                                File(
+                                    requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!,
+                                    DIR_SAVE
+                                )
+                            )
+                            //  Path: /storage/sdcard0/Android/data/package/files/ImagePicker
+                            .saveDir(requireContext().getExternalFilesDir(DIR_SAVE)!!)
+                            //  Path: /storage/sdcard0/Android/data/package/cache/ImagePicker
+                            .saveDir(File(requireContext().externalCacheDir, DIR_SAVE))
+                            //  Path: /data/data/package/cache/ImagePicker
+                            .saveDir(File(requireContext().cacheDir, DIR_SAVE))
+                            //  Path: /data/data/package/files/ImagePicker
+                            .saveDir(File(requireContext().filesDir, DIR_SAVE))
+                            .createIntent { intent ->
+                                imagePicker.launch(intent)
+                            }
+                    } else { //Gallery
+                        ImagePicker.Companion.with(requireActivity())
+                            .galleryOnly()
+                            .cropSquare()
+                            .galleryMimeTypes(  //Exclude gif images
+                                mimeTypes = arrayOf(
+                                    "image/jpg",
+                                    "image/jpeg",
+                                    "image/png"
+                                )
+                            )
+                            .compress(MAX_SIZE)
+                            //  Path: /storage/sdcard0/Android/data/package/files
+                            .saveDir(requireContext().getExternalFilesDir(null)!!)
+                            //  Path: /storage/sdcard0/Android/data/package/files/DCIM
+                            .saveDir(requireContext().getExternalFilesDir(Environment.DIRECTORY_DCIM)!!)
+                            //  Path: /storage/sdcard0/Android/data/package/files/Download
+                            .saveDir(requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!)
+                            //  Path: /storage/sdcard0/Android/data/package/files/Pictures
+                            .saveDir(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!)
+                            //  Path: /storage/sdcard0/Android/data/package/files/Pictures/ImagePicker
+                            .saveDir(
+                                File(
+                                    requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!,
+                                    DIR_SAVE
+                                )
+                            )
+                            //  Path: /storage/sdcard0/Android/data/package/files/ImagePicker
+                            .saveDir(requireContext().getExternalFilesDir(DIR_SAVE)!!)
+                            //  Path: /storage/sdcard0/Android/data/package/cache/ImagePicker
+                            .saveDir(File(requireContext().externalCacheDir, DIR_SAVE))
+                            //  Path: /data/data/package/cache/ImagePicker
+                            .saveDir(File(requireContext().cacheDir, DIR_SAVE))
+                            //  Path: /data/data/package/files/ImagePicker
+                            .saveDir(File(requireContext().filesDir, DIR_SAVE))
+                            .createIntent { intent ->
+                                imagePicker.launch(intent)
+                            }
+                    }
+                }
+            }
+            mactvEntity.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus)
+                    nsvMain.smoothScrollTo(nsvMain.maxScrollAmount, nsvMain.scrollY, 2000)
+            }
+            mactvLocale.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus)
+                    nsvMain.smoothScrollTo(nsvMain.maxScrollAmount, nsvMain.scrollY, 2000)
             }
         }
     }
@@ -87,21 +200,25 @@ class AddPeopleFragment : BaseFragment() {
                     }
                 } else {
                     with(binding){
-                        val personTemp = Persona (
-                            nombre = tietName.text.toString(),
-                            edad = tietAge.text.toString().toInt(),
-                            domicilioCalle = tietAddress.text.toString(),
-                            domicilioNumInt = tietNumberInt.text.toString(),
-                            domicilioNumExt = tietNumberExt.text.toString().ifEmpty { "0" },
-                            domicilioColonia = tietSuburb.text.toString(),
-                            domicilioEntidad = mactvEntity.text.toString(),
-                            domicilioMunicipio = mactvLocale.text.toString(),
-                            fotografia = ""
-                        )
-                        if (persona != null)
-                            vm.updatePerson(requireContext(), personTemp)
-                        else
-                            vm.addPerson(requireContext(), personTemp)
+                        val file = File(imagePath?.path.toString())
+                        if (file.exists()) {
+                            val encoded = file.readBytes().encodeBase64()
+                            val personTemp = Persona(
+                                nombre = tietName.text.toString().trim(),
+                                edad = tietAge.text.toString().toInt(),
+                                domicilioCalle = tietAddress.text.toString().trim(),
+                                domicilioNumInt = tietNumberInt.text.toString().trim(),
+                                domicilioNumExt = tietNumberExt.text.toString().ifEmpty { "0" },
+                                domicilioColonia = tietSuburb.text.toString().trim(),
+                                domicilioEntidad = mactvEntity.text.toString().trim(),
+                                domicilioMunicipio = mactvLocale.text.toString().trim(),
+                                fotografia = encoded
+                            )
+                            if (persona != null)
+                                vm.updatePerson(requireContext(), personTemp)
+                            else
+                                vm.addPerson(requireContext(), personTemp)
+                        }
                     }
                 }
             }
@@ -111,7 +228,7 @@ class AddPeopleFragment : BaseFragment() {
                 when(resource.statusType){
                     StatusType.SUCCESS -> {
                         activityMain.showToastMessage(getString(R.string.toast_inserted))
-                        activityMain.changeFabIcon(false)
+//                        activityMain.changeFabIcon(false)
                         cleanFields()
                     }
                     StatusType.ERROR -> activityMain.showErrorMessage(resource.message)
@@ -124,11 +241,22 @@ class AddPeopleFragment : BaseFragment() {
                 when(resource.statusType){
                     StatusType.SUCCESS -> {
                         activityMain.showToastMessage(getString(R.string.toast_updated))
-                        activityMain.changeFabIcon(false)
+//                        activityMain.changeFabIcon(false)
                         cleanFields()
                     }
                     StatusType.ERROR -> activityMain.showErrorMessage(resource.message)
                     StatusType.LOADING -> activityMain.showLoading(true)
+                }
+            }
+            listItem.observe(viewLifecycleOwner){view ->
+                if (view == null)
+                    vm.validateFields(list)
+                else {
+                    with(view){
+                        text = null
+                        error =  getString(R.string.error_no_valid_field)
+                        requestFocus()
+                    }
                 }
             }
         }
@@ -142,6 +270,7 @@ class AddPeopleFragment : BaseFragment() {
             tietNumberInt.text = null
             tietNumberExt.text = null
             tietSuburb.text = null
+            imagePath = null
             findNavController().navigateUp()
         }
     }
@@ -161,16 +290,16 @@ class AddPeopleFragment : BaseFragment() {
             list = listOf(tietName, tietAge, tietAddress, tietNumberInt, tietNumberExt, tietSuburb)
             list2 = listOf(mactvEntity, mactvLocale)
 
-            activityMain.setViewMode(persona != null){
-                enableFields(it)
-            }
-
-            if (persona != null) {
-                activityMain.changeFabIcon(true)
-            } else {
+//            activityMain.setViewMode(persona != null){
+//                enableFields(it)
+//            }
+//
+//            if (persona != null) {
+//                activityMain.changeFabIcon(true)
+//            } else {
                 enableFields(true)
                 mactvEntity.setAdapter(listEntities)
-            }
+//            }
         }
     }
 

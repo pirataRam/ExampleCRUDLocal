@@ -31,9 +31,9 @@ class PeopleListAdapter (
                         actvLabelName.text = persona.nombre
                         actvLabelAge.text = persona.edad.toString()
                         actvLabelAddress.text = ("${persona.domicilioCalle} ${persona.domicilioNumInt} ${if (persona.domicilioNumExt != "0") "Ext. ${persona.domicilioNumExt} " else ""}, ${persona.domicilioColonia}, ${persona.domicilioMunicipio}, ${persona.domicilioEntidad}")
-                        CoroutineScope(Dispatchers.Main).launch {
-                            acivPhoto.loadImage(persona.fotografia)
-                        }
+//                        CoroutineScope(Dispatchers.Main).launch {
+//                            acivPhoto.loadImage(persona.fotografia)
+//                        }
                     }
                 }
 
