@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.examplecrudlocal.databinding.ItemLigaBinding
 import com.example.examplecrudlocal.databinding.ItemPersonBinding
 import com.example.examplecrudlocal.localdb.entities.Persona
 import com.example.examplecrudlocal.tools.loadImage
@@ -11,10 +12,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PeopleListAdapter (
+class ListPeopleAdapter (
     private val listPeople: List<Persona>,
     private val onTouch: (onClickPerson: Persona, willDelete: Boolean) -> Unit
-        ) : RecyclerView.Adapter<PeopleListAdapter.PeopleViewHolder>(){
+        ) : RecyclerView.Adapter<ListPeopleAdapter.PeopleViewHolder>(){
 
     inner class PeopleViewHolder(private val binding: ItemPersonBinding):
             RecyclerView.ViewHolder(binding.root) {
@@ -31,16 +32,15 @@ class PeopleListAdapter (
                         actvLabelName.text = persona.nombre
                         actvLabelAge.text = persona.edad.toString()
                         actvLabelAddress.text = ("${persona.domicilioCalle} ${persona.domicilioNumInt} ${if (persona.domicilioNumExt != "0") "Ext. ${persona.domicilioNumExt} " else ""}, ${persona.domicilioColonia}, ${persona.domicilioMunicipio}, ${persona.domicilioEntidad}")
-//                        CoroutineScope(Dispatchers.Main).launch {
-//                            acivPhoto.loadImage(persona.fotografia)
-//                        }
+                        CoroutineScope(Dispatchers.Main).launch {
+                            acivPhoto.loadImage(persona.fotografia)
+                        }
                     }
                 }
-
             }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PeopleViewHolder =
-        PeopleViewHolder(ItemPersonBinding.inflate(LayoutInflater.from(parent.context)))
+        PeopleViewHolder(ItemPersonBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
     override fun getItemCount(): Int = listPeople.size
 

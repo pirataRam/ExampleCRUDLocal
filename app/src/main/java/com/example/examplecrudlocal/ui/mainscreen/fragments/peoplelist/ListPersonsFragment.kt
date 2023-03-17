@@ -29,7 +29,7 @@ class ListPersonsFragment : BaseFragment() {
     private val binding get() = _binding!!
     private val vm: ListPersonsViewModel by viewModels()
     private lateinit var mainActivity: MainActivity
-    private lateinit var listAdapter: PeopleListAdapter
+    private lateinit var listAdapter: ListPeopleAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,7 +62,7 @@ class ListPersonsFragment : BaseFragment() {
                 mainActivity.showLoading(false)
                 when (resource.statusType) {
                     StatusType.SUCCESS -> {
-                        listAdapter = PeopleListAdapter(it.data ?: emptyList()) { person, isErase ->
+                        listAdapter = ListPeopleAdapter(it.data ?: emptyList()) { person, isErase ->
                             if (isErase) {
                                 mainActivity.showQuestionMessage(
                                     getString(R.string.title_will_erase),
@@ -113,7 +113,6 @@ class ListPersonsFragment : BaseFragment() {
         mainActivity = requireActivity() as MainActivity
         vm.loadListFromLocal(requireContext())
         binding.rvListPersons.layoutManager = LinearLayoutManager(requireContext()).apply { orientation = LinearLayoutManager.VERTICAL }
-        binding.rvListPersons.adapter = PeopleListAdapter(emptyList()){ _, _ -> }
     }
 
     override fun changeToolbarParams() {
