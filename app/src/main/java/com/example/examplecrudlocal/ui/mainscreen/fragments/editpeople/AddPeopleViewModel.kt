@@ -88,7 +88,7 @@ class AddPeopleViewModel @Inject constructor(
                 roomRepository.updatePerson(context = context, persona = persona)
                 _update.postValue(Resource.success(true))
             } catch (e: Exception){
-                _saving.postValue(Resource.error(context.getString(R.string.error_saving_field)))
+                _update.postValue(Resource.error(context.getString(R.string.error_saving_field)))
             }
         }
     }

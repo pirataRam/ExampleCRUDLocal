@@ -233,24 +233,47 @@ class AddPeopleFragment : BaseFragment() {
                     }
                 } else {
                     with(binding){
-                        val file = File(imagePath?.path.toString())
-                        if (file.exists()) {
-                            val encoded = file.readBytes().encodeBase64()
-                            val personTemp = Persona(
-                                nombre = tietName.text.toString().trim(),
-                                edad = tietAge.text.toString().toInt(),
-                                domicilioCalle = tietAddress.text.toString().trim(),
-                                domicilioNumInt = tietNumberInt.text.toString().trim(),
-                                domicilioNumExt = tietNumberExt.text.toString().ifEmpty { "0" },
-                                domicilioColonia = tietSuburb.text.toString().trim(),
-                                domicilioEntidad = mactvEntity.text.toString().trim(),
-                                domicilioMunicipio = mactvLocale.text.toString().trim(),
-                                fotografia = encoded
-                            )
-                            if (persona != null)
-                                vm.updatePerson(requireContext(), personTemp)
-                            else
-                                vm.addPerson(requireContext(), personTemp)
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            val file = File(imagePath?.path.toString())
+                            if (persona == null) { // insert
+                                val photo = if (file.exists()) file.readBytes().encodeBase64() else ""
+                                if (photo.isEmpty()) {
+                                    activityMain.showToastMessage(getString(R.string.error_no_photo_selected))
+                                } else {
+                                    val personTemp = Persona(
+                                        nombre = tietName.text.toString().trim(),
+                                        edad = tietAge.text.toString().toInt(),
+                                        domicilioCalle = tietAddress.text.toString().trim(),
+                                        domicilioNumInt = tietNumberInt.text.toString().trim(),
+                                        domicilioNumExt = tietNumberExt.text.toString().ifEmpty { "0" },
+                                        domicilioColonia = tietSuburb.text.toString().trim(),
+                                        domicilioEntidad = mactvEntity.text.toString().trim(),
+                                        domicilioMunicipio = mactvLocale.text.toString().trim(),
+                                        fotografia = photo
+                                    )
+                                    vm.addPerson(requireContext(), personTemp)
+                                }
+                            } else { //update
+                                val photo =
+                                    if (imagePath == null) persona!!.fotografia else if (file.exists()) file.readBytes()
+                                        .encodeBase64() else ""
+                                if (photo.isEmpty()) {
+                                    activityMain.showToastMessage(getString(R.string.error_no_photo_selected))
+                                } else {
+                                    persona = Persona(
+                                        nombre = tietName.text.toString().trim(),
+                                        edad = tietAge.text.toString().toInt(),
+                                        domicilioCalle = tietAddress.text.toString().trim(),
+                                        domicilioNumInt = tietNumberInt.text.toString().trim(),
+                                        domicilioNumExt = tietNumberExt.text.toString().ifEmpty { "0" },
+                                        domicilioColonia = tietSuburb.text.toString().trim(),
+                                        domicilioEntidad = mactvEntity.text.toString().trim(),
+                                        domicilioMunicipio = mactvLocale.text.toString().trim(),
+                                        fotografia = photo
+                                    )
+                                    vm.updatePerson(requireContext(), persona!!)
+                                }
+                            }
                         }
                     }
                 }
